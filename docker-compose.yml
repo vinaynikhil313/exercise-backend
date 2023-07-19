@@ -1,0 +1,22 @@
+version: "2.4"
+services:
+  rest_api:
+    build:
+      dockerfile: Dockerfile
+    command: bash -c "sleep 10 && uvicorn api:app --host 0.0.0.0"
+    environment:
+      - PGSQL_HOST=postgres_db
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres_db
+  postgres_db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+#    volumes:
+#      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
